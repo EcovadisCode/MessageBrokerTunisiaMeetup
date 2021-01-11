@@ -1,0 +1,1 @@
+![build](https://github.com/EcovadisCode/TunisiaMeetup/workflows/.NET/badge.svg)
