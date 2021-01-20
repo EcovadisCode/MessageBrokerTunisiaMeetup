@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Ev.ServiceBus.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,9 @@ namespace Meetup.AzureServiceBusTopicReceiver
             _logger.LogInformation("Second Handler: Message Id : {0}", context.Message.MessageId);
 
             var message = Encoding.UTF8.GetString(context.Message.Body);
-
+            
+            // throw new Exception("Something went wrong");
+            
             _logger.LogInformation("Second Handler: Message : {0}", message);
             return Task.CompletedTask;
         }

@@ -21,6 +21,8 @@ namespace Meetup.AzureServiceBusQueueReceiver
 
             var message = Encoding.UTF8.GetString(context.Message.Body);
 
+            // throw new Exception("Something went wrong");
+
             _logger.LogInformation("Message : {0}", message);
 
             return Task.CompletedTask;
