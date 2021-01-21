@@ -35,14 +35,11 @@ namespace Meetup.AzureServiceBusQueueReceiver
             var services = new ServiceCollection();
             services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Logger, true));
             services.AddScoped<MeetupQueueHandler>();
-            services
-                .AddServiceBus()
-                .ConfigureServiceBus(options =>
-                {
-                    options.RegisterQueue(MeetupConsts.MeetupQueueName)
-                        .WithConnectionString(MeetupConsts.ServiceBusConnectionString)
-                        .WithCustomMessageHandler<MeetupQueueHandler>();
-                });
+
+            services.AddServiceBus(o => o.WithConnection(MeetupConsts.ServiceBusConnectionString));
+            
+            services.RegisterServiceBusQueue(MeetupConsts.MeetupQueueName)
+                .WithCustomMessageHandler<MeetupQueueHandler>();
 
             return services;
         }

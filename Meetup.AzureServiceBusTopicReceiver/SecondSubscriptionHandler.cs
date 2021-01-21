@@ -22,7 +22,7 @@ namespace Meetup.AzureServiceBusTopicReceiver
 
             var message = Encoding.UTF8.GetString(context.Message.Body);
             
-            // throw new Exception("Something went wrong");
+             // throw new Exception("Something went wrong");
             
             _logger.LogInformation("Second Handler: Message : {0}", message);
             return Task.CompletedTask;

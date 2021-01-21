@@ -40,13 +40,9 @@ namespace Meetup.AzureServiceBusTopicSender
             services.AddLogging(loggingBuilder =>
                 loggingBuilder.AddSerilog(dispose: true));
 
-            services
-                .AddServiceBus()
-                .ConfigureServiceBus(options =>
-                {
-                    options.RegisterTopic(MeetupConsts.MeetupTopicName)
-                        .WithConnectionString(MeetupConsts.ServiceBusConnectionString);
-                });
+            services.AddServiceBus(o => o.WithConnection(MeetupConsts.ServiceBusConnectionString));
+            services.RegisterServiceBusTopic(MeetupConsts.MeetupTopicName);
+
             return services;
         }
     }

@@ -38,20 +38,15 @@ namespace Meetup.AzureServiceBusTopicReceiver
             services
                 .AddScoped<FirstSubscriptionHandler>()
                 .AddScoped<SecondSubscriptionHandler>();
-            services
-                .AddServiceBus()
-                .ConfigureServiceBus(options =>
-                {
-                    options.RegisterSubscription(MeetupConsts.MeetupTopicName,
-                            MeetupConsts.MeetupTopicFirstSubscriptionName)
-                        .WithConnectionString(MeetupConsts.ServiceBusConnectionString)
-                        .WithCustomMessageHandler<FirstSubscriptionHandler>();
+            
+            services.AddServiceBus(o => o.WithConnection(MeetupConsts.ServiceBusConnectionString));
+                
+            services.RegisterServiceBusSubscription(MeetupConsts.MeetupTopicName, MeetupConsts.MeetupTopicFirstSubscriptionName)
+                .WithCustomMessageHandler<FirstSubscriptionHandler>();
 
-                    options.RegisterSubscription(MeetupConsts.MeetupTopicName,
-                            MeetupConsts.MeetupTopicSecondSubscriptionName)
-                        .WithConnectionString(MeetupConsts.ServiceBusConnectionString)
-                        .WithCustomMessageHandler<SecondSubscriptionHandler>();
-                });
+            services.RegisterServiceBusSubscription(MeetupConsts.MeetupTopicName, MeetupConsts.MeetupTopicSecondSubscriptionName)
+                .WithCustomMessageHandler<SecondSubscriptionHandler>();
+            
             return services;
         }
     }
