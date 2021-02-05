@@ -25,7 +25,7 @@ namespace Meetup.AzureServiceBusQueueReceiver
 
             await host.StartAsync(CancellationToken.None);
 
-            await Task.Delay((int) TimeSpan.FromMinutes(1).TotalMilliseconds);
+            Console.ReadKey(); 
 
             await host.StopAsync(CancellationToken.None);
         }
@@ -35,11 +35,16 @@ namespace Meetup.AzureServiceBusQueueReceiver
             var services = new ServiceCollection();
             services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Logger, true));
             services.AddScoped<MeetupQueueHandler>();
+            services.AddScoped<ExceptionHandler>();
 
             services.AddServiceBus(o => o.WithConnection(MeetupConsts.ServiceBusConnectionString));
-            
+
             services.RegisterServiceBusQueue(MeetupConsts.MeetupQueueName)
                 .WithCustomMessageHandler<MeetupQueueHandler>();
+
+            // services.RegisterServiceBusQueue(MeetupConsts.MeetupQueueName)
+            //     .WithCustomMessageHandler<FailedQueueHandler>()
+            //     .WithCustomExceptionHandler<ExceptionHandler>();
 
             return services;
         }

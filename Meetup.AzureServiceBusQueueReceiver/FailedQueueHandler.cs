@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Meetup.AzureServiceBusQueueReceiver
 {
-    public class MeetupQueueHandler : IMessageHandler
+    public class FailedQueueHandler : IMessageHandler
     {
-        private readonly ILogger<MeetupQueueHandler> _logger;
+        private readonly ILogger<FailedQueueHandler> _logger;
 
-        public MeetupQueueHandler(ILogger<MeetupQueueHandler> logger)
+        public FailedQueueHandler(ILogger<FailedQueueHandler> logger)
         {
             _logger = logger;
         }
@@ -19,12 +19,7 @@ namespace Meetup.AzureServiceBusQueueReceiver
         {
             _logger.LogInformation("Receiving message");
             _logger.LogInformation("Message Id : {0}", context.Message.MessageId);
-
-            var message = Encoding.UTF8.GetString(context.Message.Body);
-
-            _logger.LogInformation("Message : {0}", message);
-
-            return Task.CompletedTask;
+            throw new Exception("Something went wrong");
         }
     }
 }

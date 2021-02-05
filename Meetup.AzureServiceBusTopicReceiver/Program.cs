@@ -24,7 +24,7 @@ namespace Meetup.AzureServiceBusTopicReceiver
             var host = hostedServices.OfType<ServiceBusHost>().First();
             await host.StartAsync(CancellationToken.None);
 
-            await Task.Delay((int) TimeSpan.FromMinutes(2).TotalMilliseconds);
+            Console.ReadKey(); 
 
             await host.StopAsync(CancellationToken.None);
         }
