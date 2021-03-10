@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ev.ServiceBus;
 using Ev.ServiceBus.Abstractions;
 using Meetup.Consts;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -36,16 +37,25 @@ namespace Meetup.AzureServiceBusQueueReceiver
             services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Logger, true));
             services.AddScoped<MeetupQueueHandler>();
             services.AddScoped<ExceptionHandler>();
+            services.AddScoped<ManualCompleteQueueHandler>();
 
-            services.AddServiceBus(o => o.WithConnection(MeetupConsts.ServiceBusConnectionString));
-
+            services.AddServiceBus(o => o.WithConnection(MeetupConsts.ServiceBusConnectionString,
+                ReceiveMode.PeekLock));
+            
             services.RegisterServiceBusQueue(MeetupConsts.MeetupQueueName)
-                .WithCustomMessageHandler<MeetupQueueHandler>();
+                 .WithCustomMessageHandler<MeetupQueueHandler>();
 
             // services.RegisterServiceBusQueue(MeetupConsts.MeetupQueueName)
             //     .WithCustomMessageHandler<FailedQueueHandler>()
             //     .WithCustomExceptionHandler<ExceptionHandler>();
-
+            
+            // services.RegisterServiceBusQueue(MeetupConsts.MeetupQueueName)
+            //     .WithCustomMessageHandler<ManualCompleteQueueHandler>(options =>
+            //     {
+            //         options.MaxConcurrentCalls = 3;
+            //         options.AutoComplete = false;
+            //     });
+            
             return services;
         }
     }
